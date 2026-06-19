@@ -1,0 +1,2 @@
+source /Users/anneundlukas/soundcube_base/build/bootloader/gdbinit/symbols
+source /Users/anneundlukas/soundcube_base/build/bootloader/gdbinit/connect
