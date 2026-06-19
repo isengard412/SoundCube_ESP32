@@ -96,6 +96,7 @@ $<TARGET_FILE:__idf_esp_driver_i2s>
 $<TARGET_FILE:idf::a2dp_sink_int_codec_utils>
 $<TARGET_FILE:__idf_esp_driver_dac>
 $<TARGET_FILE:idf::esp_driver_i2c>
+$<TARGET_FILE:idf::console>
 $<TARGET_FILE:idf::a2dp_sink_ext_codec_utils>
 $<TARGET_FILE:idf::main>
 $<TARGET_FILE:__idf_bt_app_core_utils>
@@ -103,4 +104,5 @@ $<TARGET_FILE:__idf_bredr_app_common_utils>
 $<TARGET_FILE:__idf_a2dp_sink_common_utils>
 $<TARGET_FILE:__idf_a2dp_sink_int_codec_utils>
 $<TARGET_FILE:__idf_esp_driver_i2c>
+$<TARGET_FILE:__idf_console>
 $<TARGET_FILE:__idf_a2dp_sink_ext_codec_utils>

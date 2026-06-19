@@ -16741,6 +16741,24 @@
             {
                 "children": [
                     {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Instead of listing the commands in the order of registration, the help command lists\nthe available commands in sorted order, if this option is enabled.",
+                        "id": "CONSOLE_SORTED_HELP",
+                        "name": "CONSOLE_SORTED_HELP",
+                        "range": null,
+                        "title": "Enable sorted help",
+                        "type": "bool"
+                    }
+                ],
+                "depends_on": null,
+                "id": "component-config-console-library",
+                "title": "Console Library",
+                "type": "menu"
+            },
+            {
+                "children": [
+                    {
                         "children": [
                             {
                                 "children": [],

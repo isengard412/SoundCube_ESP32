@@ -23,6 +23,10 @@
 #endif
 
 #include "es8388_init.h"
+#include "equalizer.h"
+#include "storage.h"
+#include "console.h"
+#include "button.h"
 
 /* device name */
 static const char local_device_name[] = CONFIG_EXAMPLE_LOCAL_DEVICE_NAME;
@@ -165,12 +169,27 @@ static void bt_av_hdl_stack_evt(uint16_t event, void *p_param)
     }
 }
 
+static void on_pairing_request(void)
+{
+    ESP_LOGI(BT_AV_TAG, "Button triggered pairing mode");
+    esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
+}
+
 /*******************************
  * MAIN ENTRY POINT
- ******************************/
+  ******************************/
 
 void app_main(void)
 {
+    storage_init();
+    equalizer_init();
+
+    float gains[EQ_BANDS];
+    if (storage_load_eq(gains) == ESP_OK) {
+        equalizer_set_all(gains);
+        ESP_LOGI(BT_AV_TAG, "Restored saved EQ settings");
+    }
+
     ESP_ERROR_CHECK(es8388_init());
 
     ESP_ERROR_CHECK(bredr_app_common_init());
@@ -178,4 +197,9 @@ void app_main(void)
     bt_app_task_start_up();
     /* bluetooth device name, connection mode and profile set up */
     bt_app_work_dispatch(bt_av_hdl_stack_evt, BT_APP_EVT_STACK_UP, NULL, 0, NULL);
+
+    button_init(on_pairing_request);
+    console_init();
+
+    ESP_LOGI(BT_AV_TAG, "Soundcube ready");
 }

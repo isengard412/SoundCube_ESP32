@@ -96,6 +96,7 @@
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_int_codec_utils/liba2dp_sink_int_codec_utils.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/esp_driver_dac/libesp_driver_dac.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/esp_driver_i2c/libesp_driver_i2c.a
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/libconsole.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_ext_codec_utils/liba2dp_sink_ext_codec_utils.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/main/libmain.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/bt_app_core_utils/libbt_app_core_utils.a
@@ -103,4 +104,5 @@
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_common_utils/liba2dp_sink_common_utils.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_int_codec_utils/liba2dp_sink_int_codec_utils.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/esp_driver_i2c/libesp_driver_i2c.a
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/libconsole.a
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_ext_codec_utils/liba2dp_sink_ext_codec_utils.a

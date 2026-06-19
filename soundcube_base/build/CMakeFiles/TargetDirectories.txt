@@ -502,6 +502,13 @@
 /Users/anneundlukas/soundcube_base/build/esp-idf/esp_driver_i2c/CMakeFiles/install.dir
 /Users/anneundlukas/soundcube_base/build/esp-idf/esp_driver_i2c/CMakeFiles/install/local.dir
 /Users/anneundlukas/soundcube_base/build/esp-idf/esp_driver_i2c/CMakeFiles/install/strip.dir
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/CMakeFiles/__idf_console.dir
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/CMakeFiles/edit_cache.dir
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/CMakeFiles/rebuild_cache.dir
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/CMakeFiles/list_install_components.dir
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/CMakeFiles/install.dir
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/CMakeFiles/install/local.dir
+/Users/anneundlukas/soundcube_base/build/esp-idf/console/CMakeFiles/install/strip.dir
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_ext_codec_utils/CMakeFiles/__idf_a2dp_sink_ext_codec_utils.dir
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_ext_codec_utils/CMakeFiles/edit_cache.dir
 /Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_ext_codec_utils/CMakeFiles/rebuild_cache.dir

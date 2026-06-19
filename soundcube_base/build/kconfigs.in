@@ -1,4 +1,5 @@
 source "/Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/bt/Kconfig"
+source "/Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/console/Kconfig"
 source "/Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/efuse/Kconfig"
 source "/Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/esp_coex/Kconfig"
 source "/Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/esp_common/Kconfig"

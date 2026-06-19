@@ -4,7 +4,7 @@ else()
     set(EXTRA_COMPONENTS a2dp_sink_int_codec_utils)
 endif()
 
-idf_component_register(SRCS "main.c" "es8388_init.c"
+idf_component_register(SRCS "main.c" "es8388_init.c" "equalizer.c" "console.c" "storage.c" "button.c"
                     PRIV_REQUIRES bt bt_app_core_utils bredr_app_common_utils a2dp_sink_common_utils
-                    PRIV_REQUIRES ${EXTRA_COMPONENTS} esp_driver_i2c
+                    PRIV_REQUIRES ${EXTRA_COMPONENTS} esp_driver_i2c nvs_flash console esp_driver_gpio
                     INCLUDE_DIRS ".")

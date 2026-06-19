@@ -309,6 +309,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("/Users/anneundlukas/soundcube_base/build/esp-idf/console/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("/Users/anneundlukas/soundcube_base/build/esp-idf/a2dp_sink_ext_codec_utils/cmake_install.cmake")
 endif()
 

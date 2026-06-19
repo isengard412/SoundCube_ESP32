@@ -1,0 +1,19 @@
+Command: ninja all
+[1/9] Performing build step for 'bootloader'
+[1/1] cd /Users/anneundlukas/soundcube_base/build/bootloader/esp-idf/esptool_py && /Users/anneundlukas/.espressif/python_env/idf5.5_py3.12_env/bin/python /Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /Users/anneundlukas/soundcube_base/build/bootloader/bootloader.bin
+Bootloader binary size 0x6600 bytes. 0xa00 bytes (9%) free.
+[2/9] No install step for 'bootloader'
+[3/9] Completed 'bootloader'
+[4/9] Building C object esp-idf/a2dp_sink_int_codec_utils/CMakeFiles/__idf_a2dp_sink_int_codec_utils.dir/audio_sink_service_i2s.c.obj
+[5/9] Linking C static library esp-idf/a2dp_sink_int_codec_utils/liba2dp_sink_int_codec_utils.a
+[6/9] Generating esp-idf/esp_system/ld/sections.ld
+[7/9] Linking CXX executable a2dp_sink_stream.elf
+[8/9] Generating binary image from built executable
+esptool.py v4.12.dev2
+Creating esp32 image...
+Merged 2 ELF sections
+Successfully created esp32 image.
+Generated /Users/anneundlukas/soundcube_base/build/a2dp_sink_stream.bin
+[9/9] cd /Users/anneundlukas/soundcube_base/build/esp-idf/esptool_py && /Users/anneundlukas/.espressif/python_env/idf5.5_py3.12_env/bin/python /Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/anneundlukas/soundcube_base/build/partition_table/partition-table.bin /Users/anneundlukas/soundcube_base/build/a2dp_sink_stream.bin
+a2dp_sink_stream.bin binary size 0xf8b70 bytes. Smallest app partition is 0x100000 bytes. 0x7490 bytes (3%) free.
+Warning: The smallest app partition is nearly full (3% free space left)!
