@@ -1,0 +1,91 @@
+Command: ninja flash
+[1/10] Performing build step for 'bootloader'
+[1/1] cd /Users/anneundlukas/soundcube_base/build/bootloader/esp-idf/esptool_py && /Users/anneundlukas/.espressif/python_env/idf5.5_py3.12_env/bin/python /Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /Users/anneundlukas/soundcube_base/build/bootloader/bootloader.bin
+Bootloader binary size 0x6600 bytes. 0xa00 bytes (9%) free.
+[2/10] No install step for 'bootloader'
+[3/10] Completed 'bootloader'
+[4/10] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/equalizer.c.obj
+[5/10] Linking C static library esp-idf/main/libmain.a
+[6/10] Generating esp-idf/esp_system/ld/sections.ld
+[7/10] Linking CXX executable a2dp_sink_stream.elf
+[8/10] Generating binary image from built executable
+esptool.py v4.12.dev2
+Creating esp32 image...
+Merged 2 ELF sections
+Successfully created esp32 image.
+Generated /Users/anneundlukas/soundcube_base/build/a2dp_sink_stream.bin
+[9/10] cd /Users/anneundlukas/soundcube_base/build/esp-idf/esptool_py && /Users/anneundlukas/.espressif/python_env/idf5.5_py3.12_env/bin/python /Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/anneundlukas/soundcube_base/build/partition_table/partition-table.bin /Users/anneundlukas/soundcube_base/build/a2dp_sink_stream.bin
+a2dp_sink_stream.bin binary size 0xfff00 bytes. Smallest app partition is 0x100000 bytes. 0x100 bytes (0%) free.
+Warning: The smallest app partition is nearly full (0% free space left)!
+[9/10] cd /Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/esptool_py && /Users/anneundlukas/.espressif/tools/cmake/3.30.2/CMake.app/Contents/bin/cmake -D IDF_PATH=/Users/anneundlukas/.espressif/v5.5.4/esp-idf -D "SERIAL_TOOL=/Users/anneundlukas/.espressif/python_env/idf5.5_py3.12_env/bin/python;;/Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/Users/anneundlukas/soundcube_base/build -P /Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32 -p /dev/cu.usbserial-2350 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 bootloader/bootloader.bin 0x10000 a2dp_sink_stream.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.12.dev2
+Serial port /dev/cu.usbserial-2350
+Connecting...
+Chip is ESP32-D0WD (revision v1.0)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: b8:f0:09:99:4d:60
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x0010ffff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 26112 bytes to 16506...
+Writing at 0x00001000... (50 %)
+Writing at 0x0000755a... (100 %)
+Wrote 26112 bytes (16506 compressed) at 0x00001000 in 0.8 seconds (effective 268.3 kbit/s)...
+Hash of data verified.
+Compressed 1048320 bytes to 622082...
+Writing at 0x00010000... (2 %)
+Writing at 0x0001ca01... (5 %)
+Writing at 0x0002bf78... (7 %)
+Writing at 0x00037925... (10 %)
+Writing at 0x00041502... (13 %)
+Writing at 0x00047040... (15 %)
+Writing at 0x0004d1d3... (18 %)
+Writing at 0x00052c76... (21 %)
+Writing at 0x00058c6c... (23 %)
+Writing at 0x0005eb66... (26 %)
+Writing at 0x00064743... (28 %)
+Writing at 0x0006a29e... (31 %)
+Writing at 0x000700c5... (34 %)
+Writing at 0x00076fb3... (36 %)
+Writing at 0x0007d0a4... (39 %)
+Writing at 0x00082fe8... (42 %)
+Writing at 0x000895b0... (44 %)
+Writing at 0x0008f5ec... (47 %)
+Writing at 0x000954e8... (50 %)
+Writing at 0x0009b673... (52 %)
+Writing at 0x000a16b5... (55 %)
+Writing at 0x000a7a70... (57 %)
+Writing at 0x000ad525... (60 %)
+Writing at 0x000b33e2... (63 %)
+Writing at 0x000b950f... (65 %)
+Writing at 0x000bf3e3... (68 %)
+Writing at 0x000c549c... (71 %)
+Writing at 0x000cadcc... (73 %)
+Writing at 0x000d096e... (76 %)
+Writing at 0x000d6654... (78 %)
+Writing at 0x000dc0ac... (81 %)
+Writing at 0x000e240a... (84 %)
+Writing at 0x000ea0a3... (86 %)
+Writing at 0x000f07a6... (89 %)
+Writing at 0x000f8963... (92 %)
+Writing at 0x000fe59c... (94 %)
+Writing at 0x00103dd0... (97 %)
+Writing at 0x00109f33... (100 %)
+Wrote 1048320 bytes (622082 compressed) at 0x00010000 in 14.3 seconds (effective 587.8 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 103...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (103 compressed) at 0x00008000 in 0.1 seconds (effective 372.1 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

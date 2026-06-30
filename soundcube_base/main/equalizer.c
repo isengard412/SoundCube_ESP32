@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string.h>
+#include <stdbool.h>
 #include "esp_log.h"
 #include "equalizer.h"
 #define SAMPLE_RATE 44100
@@ -26,8 +27,11 @@ typedef struct {
 } biquad_t;
 
 typedef struct {
-    biquad_t bands[EQ_BANDS];
+    biquad_t left[EQ_BANDS];
+    biquad_t right[EQ_BANDS];
     float gains[EQ_BANDS];
+    bool active[EQ_BANDS];   /* true when gain != 0 dB */
+    int  active_count;       /* number of bands with non-zero gain */
 } eq_state_t;
 
 static eq_state_t s_eq;
@@ -71,9 +75,16 @@ static float biquad_process(biquad_t *f, float x)
 
 static void eq_recompute(eq_state_t *eq)
 {
+    eq->active_count = 0;
     for (int i = 0; i < EQ_BANDS; i++) {
-        biquad_peaking(&eq->bands[i], EQ_FREQS[i], eq->gains[i], Q_FACTOR, SAMPLE_RATE);
-        biquad_reset(&eq->bands[i]);
+        eq->active[i] = (fabsf(eq->gains[i]) > 0.05f);
+        if (eq->active[i]) {
+            eq->active_count++;
+            biquad_peaking(&eq->left[i],  EQ_FREQS[i], eq->gains[i], Q_FACTOR, SAMPLE_RATE);
+            biquad_peaking(&eq->right[i], EQ_FREQS[i], eq->gains[i], Q_FACTOR, SAMPLE_RATE);
+        }
+        biquad_reset(&eq->left[i]);
+        biquad_reset(&eq->right[i]);
     }
 }
 
@@ -87,20 +98,23 @@ esp_err_t equalizer_init(void)
 
 void equalizer_process(int16_t *buffer, uint32_t samples)
 {
-    for (uint32_t i = 0; i < samples; i++) {
-        float left = (float)buffer[i * 2];
+    /* Fast path: nothing to do when all bands are flat */
+    if (s_eq.active_count == 0) return;
+
+    /* samples is the total number of int16_t values; each stereo frame = 2 values */
+    uint32_t frames = samples / 2;
+    for (uint32_t i = 0; i < frames; i++) {
+        float left  = (float)buffer[i * 2];
         float right = (float)buffer[i * 2 + 1];
 
         for (int b = 0; b < EQ_BANDS; b++) {
-            left = biquad_process(&s_eq.bands[b], left);
-            right = biquad_process(&s_eq.bands[b], right);
+            if (!s_eq.active[b]) continue;
+            left  = biquad_process(&s_eq.left[b],  left);
+            right = biquad_process(&s_eq.right[b], right);
         }
 
-        left = fmaxf(-32768.0f, fminf(32767.0f, left));
-        right = fmaxf(-32768.0f, fminf(32767.0f, right));
-
-        buffer[i * 2] = (int16_t)left;
-        buffer[i * 2 + 1] = (int16_t)right;
+        buffer[i * 2]     = (int16_t)fmaxf(-32768.0f, fminf(32767.0f, left));
+        buffer[i * 2 + 1] = (int16_t)fmaxf(-32768.0f, fminf(32767.0f, right));
     }
 }
 
@@ -115,8 +129,15 @@ esp_err_t equalizer_set_band(int band, float gain_db)
     if (band < 0 || band >= EQ_BANDS) return ESP_ERR_INVALID_ARG;
     gain_db = fmaxf(MIN_GAIN, fminf(MAX_GAIN, gain_db));
     s_eq.gains[band] = gain_db;
-    biquad_peaking(&s_eq.bands[band], EQ_FREQS[band], gain_db, Q_FACTOR, SAMPLE_RATE);
-    biquad_reset(&s_eq.bands[band]);
+    s_eq.active[band] = (fabsf(gain_db) > 0.05f);
+    s_eq.active_count = 0;
+    for (int i = 0; i < EQ_BANDS; i++) {
+        if (s_eq.active[i]) s_eq.active_count++;
+    }
+    biquad_peaking(&s_eq.left[band],  EQ_FREQS[band], gain_db, Q_FACTOR, SAMPLE_RATE);
+    biquad_peaking(&s_eq.right[band], EQ_FREQS[band], gain_db, Q_FACTOR, SAMPLE_RATE);
+    biquad_reset(&s_eq.left[band]);
+    biquad_reset(&s_eq.right[band]);
     ESP_LOGI(TAG, "Band %d (%s) set to %.1f dB", band, EQ_LABELS[band], gain_db);
     return ESP_OK;
 }
