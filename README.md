@@ -183,11 +183,3 @@ See the [LICENSE](LICENSE) file for the full text.
 
 > **Dependency note:** ESP-IDF is licensed under Apache 2.0, which is compatible with GPL v3.
 > If you fork this project, be aware that GPL v2 (without the "or later" clause) is **not** compatible with Apache 2.0.
-
-
-## VS CODE
-
-Action	Shortcut	What happens
-Build	Ctrl+Shift+B	Runs idf.py build (default task)
-Flash	Ctrl+Shift+P → Run Task → ESP-IDF: Flash	Flashes to the connected device
-Flash & Monitor	Ctrl+Shift+P → Run Task → ESP-IDF: Flash & Monitor	Flashes + opens serial monitor
