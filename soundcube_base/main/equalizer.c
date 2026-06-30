@@ -98,11 +98,27 @@ esp_err_t equalizer_init(void)
 
 void equalizer_process(int16_t *buffer, uint32_t samples)
 {
+    /* samples is the total number of int16_t values; each stereo frame = 2 values */
+    uint32_t frames = samples / 2;
+
+#ifdef EQUALIZER_MONO_MIX
+    for (uint32_t i = 0; i < frames; i++) {
+        /* Sum L+R into mono before EQ — only one filter chain needed */
+        float mono = ((float)buffer[i * 2] + (float)buffer[i * 2 + 1]) * 0.5f;
+
+        for (int b = 0; b < EQ_BANDS; b++) {
+            if (!s_eq.active[b]) continue;
+            mono = biquad_process(&s_eq.left[b], mono);
+        }
+
+        int16_t out = (int16_t)fmaxf(-32768.0f, fminf(32767.0f, mono));
+        buffer[i * 2]     = out;
+        buffer[i * 2 + 1] = out;
+    }
+#else
     /* Fast path: nothing to do when all bands are flat */
     if (s_eq.active_count == 0) return;
 
-    /* samples is the total number of int16_t values; each stereo frame = 2 values */
-    uint32_t frames = samples / 2;
     for (uint32_t i = 0; i < frames; i++) {
         float left  = (float)buffer[i * 2];
         float right = (float)buffer[i * 2 + 1];
@@ -116,6 +132,7 @@ void equalizer_process(int16_t *buffer, uint32_t samples)
         buffer[i * 2]     = (int16_t)fmaxf(-32768.0f, fminf(32767.0f, left));
         buffer[i * 2 + 1] = (int16_t)fmaxf(-32768.0f, fminf(32767.0f, right));
     }
+#endif
 }
 
 float equalizer_get_band(int band)

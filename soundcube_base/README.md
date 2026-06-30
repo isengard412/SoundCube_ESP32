@@ -1,94 +1,189 @@
-| Supported Targets | ESP32 |
-| ----------------- | ----- |
+# 🔊 Soundcube
 
-A2DP-SINK-STREAM EXAMPLE
-======================
+**A Bluetooth A2DP speaker firmware for the ESP32 with a 10-band equalizer, NVS settings persistence, and a live serial console.**
 
-Example of A2DP audio sink role
+Built on [ESP-IDF v5.5](https://github.com/espressif/esp-idf) using the Bluedroid Classic Bluetooth stack.
 
-This is the example of API implementing Advanced Audio Distribution Profile to receive an audio stream.
+---
 
-This example involves the use of Bluetooth legacy profile A2DP for audio stream reception and I2S for audio stream output interface.
+## Features
 
-## Required components
+| | |
+|---|---|
+| 🎵 **Bluetooth A2DP Sink** | Pairs as a standard Bluetooth speaker — works with any phone, tablet or computer |
+| 🎛️ **10-Band Parametric EQ** | Software biquad equalizer covering 31 Hz – 16 kHz, adjustable at runtime via serial |
+| 💾 **NVS Persistence** | EQ settings survive reboots — stored in flash, loaded automatically on startup |
+| 🔈 **Mono Mix Mode** | Compile-time option to sum L+R into a mono signal for single-speaker builds |
+| 🔁 **Pairing Button** | GPIO button (short or long press) triggers discoverable pairing mode |
+| 🖥️ **Serial Console** | Live command-line interface over USB-UART for EQ tuning and device control |
+| 🔌 **ES8388 Codec** | I²C initialisation for the ES8388 audio codec with I2S output |
 
-- [bt_app_core_utils](../common/bt_app_core_utils)
-- [bredr_app_common_utils](../common/bredr_app_common_utils)
-- [a2dp_sink_common_utils](../common/a2dp_utils/a2dp_sink_common_utils)
-- [a2dp_sink_int_codec_utils](../common/a2dp_utils/a2dp_sink_int_codec_utils)
-- [a2dp_sink_ext_codec_utils](../common/a2dp_utils/a2dp_sink_ext_codec_utils)
+---
 
-```
-+-------------------------+-------------------------+---------------------+
-|a2dp_sink_int_codec_utils|a2dp_sink_ext_codec_utils|                     |
-+-------------------------+-------------------------+                     |
-|               a2dp_sink_common_utils              |  bt_app_core_utils  |
-+---------------------------------------------------+                     |
-|               bredr_app_common_utils              |                     |
-+---------------------------------------------------+---------------------+
-```
+## Hardware
 
-Detailed information can be viewed through the [../common/README.md](../common/README.md).
+### Required
 
-## How to use this example
+| Component | Notes |
+|---|---|
+| **ESP32** | Any module with Bluetooth Classic support |
+| **ES8388 audio codec** | Connected via I²C (config & init) and I2S (audio data) |
+| **Speaker / amplifier** | Connected to the ES8388 line/headphone output |
 
-### Hardware Required
+### Pin Mapping
 
-To play the sound, there is a need of loudspeaker and possibly an external I2S codec. Otherwise the example will only show a count of audio data packets received silently. Internal DAC can be selected and in this case external I2S codec may not be needed.
+| ESP32 GPIO | Signal | Notes |
+|---|---|---|
+| GPIO 18 | I²C SDA | ES8388 control |
+| GPIO 23 | I²C SCL | ES8388 control |
+| GPIO 25 | I2S DATA | Audio out |
+| GPIO 26 | I2S BCK | Bit clock |
+| GPIO 27 | I2S LRCK | Word select |
+| GPIO 39 | Button | Pairing trigger (active low) |
 
-For the I2S codec, pick whatever chip or board works for you; this code was written using a PCM5102 chip, but other I2S boards and chips will probably work as well. The default I2S connections are shown below, but these can be changed in menuconfig:
+> Pins can be changed in `sdkconfig` / `menuconfig`.
 
-| ESP pin   | I2S signal   |
-| :-------- | :----------- |
-| GPIO27    | LRCK         |
-| GPIO25    | DATA         |
-| GPIO26    | BCK          |
+---
 
-If the internal DAC is selected, analog audio will be available on GPIO25 and GPIO26. The output resolution on these pins will always be limited to 8 bit because of the internal structure of the DACs.
+## Getting Started
 
-### Configure the project
+### Prerequisites
 
-```
+- [ESP-IDF v5.5](https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32/get-started/index.html) installed and sourced
+- ESP32 board connected via USB
+
+### Build & Flash
+
+```bash
+# Source the ESP-IDF environment
+source $IDF_PATH/export.sh
+
+# Configure (optional — set device name, codec selection, pin mapping)
 idf.py menuconfig
+
+# Build
+idf.py build
+
+# Flash and open monitor
+idf.py flash monitor
 ```
 
-* Choose external I2S codec or internal DAC for audio output, and configure the output PINs under A2DP Sink Internal Codec Example Configuration.
+The device will appear as **`ESP_SPEAKER`** (configurable in `menuconfig → A2DP Example Configuration`).
 
-### Build and Flash
+---
 
-Build the project and flash it to the board, then run monitor tool to view serial output.
+## Serial Console
 
-```
-idf.py -p PORT flash monitor
-```
-
-(To exit the serial monitor, type ``Ctrl-]``.)
-
-## Example Output
-
-After the program is started, the example starts inquiry scan and page scan, awaiting being discovered and connected. Other bluetooth devices such as smart phones can discover a device named "ESP_SPEAKER". A smartphone or another ESP-IDF example of A2DP source can be used to connect to the local device.
-
-Once A2DP connection is set up, there will be a notification message with the remote device's bluetooth MAC address like the following:
+Connect at **115200 baud**. A prompt appears after boot:
 
 ```
-I (106427) BT_AV: A2DP connection state: Connected, [64:a2:f9:69:57:a4]
+soundcube>
 ```
 
-If a smartphone is used to connect to local device, starting to play music with an APP will result in the transmission of audio stream. The transmitting of audio stream will be visible in the application log including a count of audio data packets, like this:
+### Commands
+
+| Command | Description |
+|---|---|
+| `eq <0–9> <gain>` | Set EQ band gain in dB (–12 to +12). Band 0 = 31 Hz, band 9 = 16 kHz |
+| `eq show` | Display all 10 bands and their current gain |
+| `eq reset` | Reset all bands to 0 dB (flat) |
+| `save` | Persist current EQ settings to flash |
+| `pair` | Enter Bluetooth pairing / discoverable mode |
+| `stfu` | Mute all background log output until next reboot |
+| `yolo` | Soft-reset the device |
+| `help` | Show command reference |
+
+### Example session
 
 ```
-I (120627) BT_AV: A2DP audio state: Started
-I (122697) BT_AV: Audio packet count 100
-I (124697) BT_AV: Audio packet count 200
-I (126697) BT_AV: Audio packet count 300
-I (128697) BT_AV: Audio packet count 400
+soundcube> eq show
+ 10-Band Equalizer:
+ -----------------------
+  31Hz:   0.0 dB
+  62Hz:   0.0 dB
+ 125Hz:  +3.0 dB
+ 250Hz:  +3.0 dB
+ 500Hz:   0.0 dB
+  1kHz:  -2.0 dB
+  2kHz:   0.0 dB
+  4kHz:   0.0 dB
+  8kHz:  +1.5 dB
+ 16kHz:  +1.5 dB
+ -----------------------
+soundcube> eq 0 6
+Band 0 (31Hz) set to 6.0 dB
+soundcube> save
+EQ settings saved to flash.
 ```
 
-Also, the sound will be heard if a loudspeaker is connected and possible external I2S codec is correctly configured. For ESP32 A2DP source example, the sound is noise as the audio source generates the samples with a random sequence.
+---
 
-## Troubleshooting
-* For current stage, the supported audio codec in ESP32 A2DP is SBC. SBC data stream is transmitted to A2DP sink and then decoded into PCM samples as output. The PCM data format is normally of 44.1kHz sampling rate, two-channel 16-bit sample stream. Other SBC configurations in ESP32 A2DP sink is supported but need additional modifications of protocol stack settings.
-* As a usage limitation, ESP32 A2DP sink can support at most one connection with remote A2DP source devices. Also, A2DP sink cannot be used together with A2DP source at the same time, but can be used with other profiles such as SPP and HFP.
+## EQ Band Reference
+
+| Band | Frequency | Suggested use |
+|---|---|---|
+| 0 | 31 Hz | Sub-bass |
+| 1 | 62 Hz | Bass body |
+| 2 | 125 Hz | Upper bass / warmth |
+| 3 | 250 Hz | Low-mids |
+| 4 | 500 Hz | Mids |
+| 5 | 1 kHz | Upper-mids / presence |
+| 6 | 2 kHz | Presence / attack |
+| 7 | 4 kHz | Clarity |
+| 8 | 8 kHz | Air / sibilance |
+| 9 | 16 kHz | Brilliance / sparkle |
+
+---
+
+## Mono Mix Mode
+
+For single-speaker builds, enable mono mixing in `main/equalizer.h`:
+
+```c
+#define EQUALIZER_MONO_MIX
+```
+
+When active, both stereo input channels are summed into one mono signal **before** EQ processing, and the result is written to both output channels. This also halves EQ CPU load since only one filter chain runs. Comment the line out to restore independent stereo processing.
+
+---
+
+## Project Structure
+
+```
+main/
+├── main.c           — App entry point, BT stack setup, A2DP callbacks
+├── equalizer.c/h    — 10-band biquad EQ engine
+├── storage.c/h      — NVS load/save for EQ settings
+├── console.c/h      — UART command console
+├── es8388_init.c/h  — ES8388 codec I²C initialisation
+├── button.c/h       — GPIO button with debounce and short/long-press detection
+└── Kconfig.projbuild — menuconfig options (device name, codec selection)
+```
+
+---
+
+## Configuration Reference
+
+All options are available via `idf.py menuconfig → A2DP Example Configuration`:
+
+| Option | Default | Description |
+|---|---|---|
+| `CONFIG_EXAMPLE_LOCAL_DEVICE_NAME` | `ESP_SPEAKER` | Bluetooth device name visible during pairing |
+| `CONFIG_EXAMPLE_A2DP_SINK_USE_EXTERNAL_CODEC` | `n` | Use external (undecoded) audio data path |
+| I2S pin options | see above | BCK, LRCK, DATA GPIOs |
+
+---
+
+## License
+
+`SPDX-License-Identifier: GPL-3.0-or-later`
+
+This project is licensed under the **GNU General Public License v3.0 or later**.
+See the [LICENSE](LICENSE) file for the full text.
+
+> **Dependency note:** ESP-IDF is licensed under Apache 2.0, which is compatible with GPL v3.
+> If you fork this project, be aware that GPL v2 (without the "or later" clause) is **not** compatible with Apache 2.0.
+
 
 ## VS CODE
 

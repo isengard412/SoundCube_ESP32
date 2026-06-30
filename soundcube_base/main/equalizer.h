@@ -6,6 +6,11 @@
 
 #define EQ_BANDS 10
 
+/* Define to mix both stereo input channels into a single mono signal before
+ * EQ processing. Both output channels will carry the identical L+R mix.
+ * Comment out to restore independent stereo processing. */
+#define EQUALIZER_MONO_MIX
+
 extern const char *EQ_LABELS[EQ_BANDS];
 
 esp_err_t equalizer_init(void);
