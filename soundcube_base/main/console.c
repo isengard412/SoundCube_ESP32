@@ -4,6 +4,7 @@
 #include "esp_log.h"
 #include "esp_console.h"
 #include "esp_gap_bt_api.h"
+#include "esp_system.h"
 #include "equalizer.h"
 #include "storage.h"
 
@@ -74,6 +75,21 @@ static int pair_cmd_handler(int argc, char **argv)
     return 0;
 }
 
+static int stfu_cmd_handler(int argc, char **argv)
+{
+    esp_log_level_set("*", ESP_LOG_NONE);
+    printf("Logs muted until next reboot.\n");
+    return 0;
+}
+
+static int yolo_cmd_handler(int argc, char **argv)
+{
+    printf("Rebooting...\n");
+    fflush(stdout);
+    esp_restart();
+    return 0;
+}
+
 static int help_cmd_handler(int argc, char **argv)
 {
     printf("\nSoundcube Bluetooth Speaker - Commands:\n");
@@ -82,6 +98,8 @@ static int help_cmd_handler(int argc, char **argv)
     printf("  eq reset          Reset EQ to flat\n");
     printf("  save              Persist EQ settings to flash\n");
     printf("  pair              Enter Bluetooth pairing mode\n");
+    printf("  stfu              Mute all log output until next reboot\n");
+    printf("  yolo              Soft-reset the device\n");
     printf("  help              Show this help\n");
     return 0;
 }
@@ -103,6 +121,16 @@ esp_err_t console_init(void)
         .help = "Enter Bluetooth pairing mode",
         .func = pair_cmd_handler,
     };
+    const esp_console_cmd_t stfu_cmd = {
+        .command = "stfu",
+        .help = "Mute all log output until next reboot",
+        .func = stfu_cmd_handler,
+    };
+    const esp_console_cmd_t yolo_cmd = {
+        .command = "yolo",
+        .help = "Soft-reset the device",
+        .func = yolo_cmd_handler,
+    };
     const esp_console_cmd_t help_cmd = {
         .command = "help",
         .help = "Show available commands",
@@ -117,6 +145,8 @@ esp_err_t console_init(void)
     ESP_ERROR_CHECK(esp_console_cmd_register(&eq_cmd));
     ESP_ERROR_CHECK(esp_console_cmd_register(&save_cmd));
     ESP_ERROR_CHECK(esp_console_cmd_register(&pair_cmd));
+    ESP_ERROR_CHECK(esp_console_cmd_register(&stfu_cmd));
+    ESP_ERROR_CHECK(esp_console_cmd_register(&yolo_cmd));
     ESP_ERROR_CHECK(esp_console_cmd_register(&help_cmd));
     esp_console_register_help_command();
 

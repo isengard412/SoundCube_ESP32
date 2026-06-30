@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "ESP32",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            "compilerPath": "",
+            "intelliSenseMode": "linux-gcc-arm",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++17",
+            "includePath": [
+                "${workspaceFolder}/build/config",
+                "${workspaceFolder}/main",
+                "/Users/anneundlukas/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20260121/xtensa-esp-elf/xtensa-esp-elf/include",
+                "/Users/anneundlukas/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20260121/xtensa-esp-elf/lib/gcc/xtensa-esp-elf/14.2.0/include",
+                "/Users/anneundlukas/.espressif/v5.5.4/esp-idf/components/**"
+            ],
+            "defines": [
+                "ESP_PLATFORM",
+                "IDF_VER=\"v5.5.4\"",
+                "SOC_MMU_PAGE_SIZE=CONFIG_MMU_PAGE_SIZE",
+                "SOC_XTAL_FREQ_MHZ=CONFIG_XTAL_FREQ",
+                "_GNU_SOURCE"
+            ]
+        }
+    ],
+    "version": 4
+}
